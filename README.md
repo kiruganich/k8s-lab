@@ -67,6 +67,7 @@ k8s-lab/
 #### Сборка образа backend
 
 `cd ../backend`
+
 `docker build -t k8s-backend:1.0 .`
 
 ```bash
@@ -303,6 +304,7 @@ Handling connection for 8080
 # Масштабирование frontend до 3 реплик
 
 `kubectl scale deployment frontend-deployment --replicas=3 -n lab5`
+
 `kubectl get pods -n lab5`
 
 ```bash
@@ -319,6 +321,7 @@ frontend-deployment-77bb9674b-tkcpx   1/1     Running   0          19s
 # Масштабирование backend до 5 реплик
 
 `kubectl scale deployment backend-deployment --replicas=5 -n lab5`
+
 `kubectl get pods -n lab5`
 
 ```bash
@@ -341,6 +344,7 @@ frontend-deployment-77bb9674b-tkcpx   1/1     Running             0          33s
 # Сборка новой версии backend
 
 `cd examples/backend`
+
 `docker build -t k8s-backend:2.0 .`
 
 ```bash
@@ -416,22 +420,25 @@ deployment.apps/backend-deployment rolled back
 
 ### Шаг 9: Применение дополнительных манифестов (самостоятельная работа)
 
-```bash
-# Применение ConfigMap и Secret
-kubectl apply -f k8s-manifests/configmap.yaml
-kubectl apply -f k8s-manifests/secret.yaml
 
-# Применение HPA
-kubectl apply -f k8s-manifests/hpa.yaml
-```
+#### Применение ConfigMap и Secret
+`kubectl apply -f k8s-manifests/configmap.yaml`
+
+`kubectl apply -f k8s-manifests/secret.yaml`
+
+#### Применение HPA
+`kubectl apply -f k8s-manifests/hpa.yaml`
+
 
 ### Шаг 10: Очистка ресурсов
 
-```bash
-# Удаление всех ресурсов в namespace
-kubectl delete namespace lab5
 
-# Или удаление по манифестам
-kubectl delete -f k8s-manifests/
-```
+#### Удаление всех ресурсов в namespace
+
+`kubectl delete namespace lab5`
+
+#### Или удаление по манифестам
+
+`kubectl delete -f k8s-manifests/`
+
 
