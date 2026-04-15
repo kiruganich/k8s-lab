@@ -35,6 +35,7 @@ k8s-lab/
 #### Сборка образа frontend
 
 `cd examples/frontend`
+
 `docker build -t k8s-frontend:1.0 .`
 
 ```bash
