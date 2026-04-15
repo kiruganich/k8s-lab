@@ -32,9 +32,11 @@ k8s-lab/
 
 ### Шаг 1: Подготовка Docker-образов
 
-# Сборка образа frontend
-*cd examples/frontend*
-*docker build -t k8s-frontend:1.0 .*
+#### Сборка образа frontend
+
+`cd examples/frontend`
+`docker build -t k8s-frontend:1.0 .`
+
 ```bash
 [+] Building 1.4s (10/10) FINISHED                                                                                            docker:desktop-linux
  => [internal] load build definition from Dockerfile                                                                                          0.0s
@@ -47,7 +49,7 @@ k8s-lab/
  => [internal] load build context                                                                                                             0.0s
  => => transferring context: 153B                                                                                                             0.0s
  => CACHED [2/5] WORKDIR /app                                                                                                                 0.0s
- => CACHED [3/5] COPY package*.json ./                                                                                                        0.0s
+ => CACHED [3/5] COPY package`.json ./                                                                                                        0.0s
  => CACHED [4/5] RUN npm install --production                                                                                                 0.0s 
  => CACHED [5/5] COPY . .                                                                                                                     0.0s 
  => exporting to image                                                                                                                        0.1s
@@ -61,9 +63,11 @@ k8s-lab/
  ```
 
 
-# Сборка образа backend
-*cd ../backend*
-*docker build -t k8s-backend:1.0 .*
+#### Сборка образа backend
+
+`cd ../backend`
+`docker build -t k8s-backend:1.0 .`
+
 ```bash
 [+] Building 1.3s (15/15) FINISHED                                                                                            docker:desktop-linux
  => [internal] load build definition from Dockerfile                                                                                          0.0s
@@ -97,7 +101,7 @@ k8s-lab/
 
 ### Шаг 2: Проверка образов
 
-*docker images | findstr k8s*
+`docker images | findstr k8s`
 
 ```bash
 k8s-backend                               1.0                                                                           a443758d6b16   14 minutes ago   25.8MB
@@ -117,12 +121,12 @@ registry.k8s.io/pause                     3.10                                  
 
 #### Создание namespace и всех ресурсов
 
-*kubectl apply -f k8s-manifests/namespace.yaml*
+`kubectl apply -f k8s-manifests/namespace.yaml`
 
 ```bash
 secret/app-secret created
 ```
-*kubectl apply -f k8s-manifests/*
+`kubectl apply -f k8s-manifests/`
 
 ```bash
 deployment.apps/backend-deployment created
@@ -140,7 +144,7 @@ secret/app-secret unchanged
 
 #### Проверка namespace
 
-*kubectl get namespace lab5*
+`kubectl get namespace lab5`
 
 ```bash
 NAME   STATUS   AGE
@@ -149,7 +153,7 @@ lab5   Active   6m21s
 
 #### Проверка deployments
 
-*kubectl get deployments -n lab5*
+`kubectl get deployments -n lab5`
 
 ```bash
 NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
@@ -159,7 +163,7 @@ frontend-deployment   2/2     2            2           49s
 
 #### Проверка pods
 
-*kubectl get pods -n lab5*
+`kubectl get pods -n lab5`
 
 ```bash
 NAME                                  READY   STATUS    RESTARTS   AGE
@@ -172,7 +176,7 @@ frontend-deployment-77bb9674b-8m2d5   1/1     Running   0          58s
 
 #### Проверка services
 
-*kubectl get services -n lab5*
+`kubectl get services -n lab5`
 
 ```bash
 NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
@@ -182,7 +186,7 @@ frontend-service   NodePort    10.97.124.50     <none>        80:30080/TCP   80s
 
 #### Подробная информация о pod
 
-*kubectl describe pod kubectl describe pod backend-deployment-75444d5bb6-5djx7 -n lab5*
+`kubectl describe pod kubectl describe pod backend-deployment-75444d5bb6-5djx7 -n lab5`
 
 ```bash
 Name:             backend-deployment-75444d5bb6-5djx7
@@ -257,7 +261,7 @@ Events:
 
 #### Просмотр логов
 
-*kubectl logs backend-deployment-75444d5bb6-5djx7 -n lab5*
+`kubectl logs backend-deployment-75444d5bb6-5djx7 -n lab5`
 
 ```bash
 {"time":"2026-04-15T09:24:12.504251821Z","level":"INFO","msg":"Starting backend server","port":"5000","pod_name":"backend-deployment-75444d5bb6-5djx7"}
@@ -268,11 +272,11 @@ Events:
 
 #### Через NodePort:
 
-Открыть браузер и перейти по адресу: **http://localhost:30080**
+Открыть браузер и перейти по адресу: ``http://localhost:30080``
 
 #### Через port-forwarding:
 
-*kubectl port-forward service/frontend-service 8080:80 -n lab5*
+`kubectl port-forward service/frontend-service 8080:80 -n lab5`
 
 ```bash
 Forwarding from 127.0.0.1:8080 -> 3000
@@ -282,7 +286,7 @@ Handling connection for 8080
 Handling connection for 8080       
 ```
 
-Затем открыть: **http://localhost:8080**
+Затем открыть: ``http://localhost:8080``
 
 ### Шаг 6: Тестирование
 
@@ -297,8 +301,8 @@ Handling connection for 8080
 
 # Масштабирование frontend до 3 реплик
 
-*kubectl scale deployment frontend-deployment --replicas=3 -n lab5*
-*kubectl get pods -n lab5*
+`kubectl scale deployment frontend-deployment --replicas=3 -n lab5`
+`kubectl get pods -n lab5`
 
 ```bash
 deployment.apps/frontend-deployment scaled
@@ -313,8 +317,8 @@ frontend-deployment-77bb9674b-tkcpx   1/1     Running   0          19s
 ```
 # Масштабирование backend до 5 реплик
 
-*kubectl scale deployment backend-deployment --replicas=5 -n lab5*
-*kubectl get pods -n lab5*
+`kubectl scale deployment backend-deployment --replicas=5 -n lab5`
+`kubectl get pods -n lab5`
 
 ```bash
 deployment.apps/backend-deployment scaled
@@ -335,8 +339,8 @@ frontend-deployment-77bb9674b-tkcpx   1/1     Running             0          33s
 
 # Сборка новой версии backend
 
-*cd examples/backend*
-*docker build -t k8s-backend:2.0 .*
+`cd examples/backend`
+`docker build -t k8s-backend:2.0 .`
 
 ```bash
 [+] Building 1.5s (15/15) FINISHED                                                                                            docker:desktop-linux
@@ -371,7 +375,7 @@ frontend-deployment-77bb9674b-tkcpx   1/1     Running             0          33s
 
 # Обновление deployment
 
-*kubectl set image deployment/backend-deployment backend=k8s-backend:2.0 -n lab5*
+`kubectl set image deployment/backend-deployment backend=k8s-backend:2.0 -n lab5`
 
 ```bash
 deployment.apps/backend-deployment image updated
@@ -379,7 +383,7 @@ deployment.apps/backend-deployment image updated
 
 # Проверка статуса обновления
 
-*kubectl rollout status deployment/backend-deployment -n lab5*
+`kubectl rollout status deployment/backend-deployment -n lab5`
 
 ```bash
 Waiting for deployment "backend-deployment" rollout to finish: 2 old replicas are pending termination...
@@ -393,7 +397,7 @@ deployment "backend-deployment" successfully rolled out
 
 # Просмотр истории обновлений
 
-*kubectl rollout history deployment/backend-deployment -n lab5*
+`kubectl rollout history deployment/backend-deployment -n lab5`
 
 ```bash
 REVISION  CHANGE-CAUSE
@@ -403,7 +407,7 @@ REVISION  CHANGE-CAUSE
 
 # Откат к предыдущей версии
 
-*kubectl rollout undo deployment/backend-deployment -n lab5*
+`kubectl rollout undo deployment/backend-deployment -n lab5`
 
 ```bash
 deployment.apps/backend-deployment rolled back
